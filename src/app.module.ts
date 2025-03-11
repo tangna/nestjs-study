@@ -11,6 +11,8 @@ import { Keyv } from 'keyv';
 import { createKeyv } from '@keyv/redis';
 import { CacheableMemory } from 'cacheable';
 import { AppControllerV2 } from './app.controllerV2';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { AppControllerV2 } from './app.controllerV2';
     //   },
     // }),
     UsersModule,
+    ScheduleModule.forRoot(),
+    TasksModule,
   ],
   controllers: [AppController, AppControllerV2],
   providers: [
