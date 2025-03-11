@@ -4,6 +4,12 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpCacheInterceptor } from './common/CacheInterceptor';
+import { Keyv } from 'keyv';
+import { createKeyv } from '@keyv/redis';
+import { CacheableMemory } from 'cacheable';
 
 @Module({
   imports: [
@@ -23,9 +29,32 @@ import { UsersModule } from './users/users.module';
         autoLoadEntities: true,
       }),
     }),
+    // CacheModule.register({ ttl: 5000 }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        console.log(configService);
+        console.log(configService.get('CACHE_HOST'));
+        return {
+          stores: [
+            new Keyv({
+              store: new CacheableMemory({
+                ttl: configService.get('CACHE_TTL'),
+                lruSize: configService.get('CACHE_SIZE'),
+              }),
+            }),
+            createKeyv(configService.get('CACHE_HOST')),
+          ],
+        };
+      },
+    }),
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
+  ],
 })
 export class AppModule {}
