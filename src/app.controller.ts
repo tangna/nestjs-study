@@ -18,13 +18,13 @@ export class AppController {
     // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  // @Get()
-  // getHello(): string {
-  //   console.log(new Date());
-  //   return this.appService.getHello();
-  // }
+  @Get('')
+  getHello(): string {
+    console.log('v1', new Date());
+    return this.appService.getHello();
+  }
 
-  @Get()
+  @Get('entity')
   findOne(): UserEntity {
     return new UserEntity({
       id: 1,

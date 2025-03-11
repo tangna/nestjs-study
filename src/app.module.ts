@@ -10,6 +10,7 @@ import { HttpCacheInterceptor } from './common/CacheInterceptor';
 import { Keyv } from 'keyv';
 import { createKeyv } from '@keyv/redis';
 import { CacheableMemory } from 'cacheable';
+import { AppControllerV2 } from './app.controllerV2';
 
 @Module({
   imports: [
@@ -51,7 +52,7 @@ import { CacheableMemory } from 'cacheable';
     // }),
     UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AppControllerV2],
   providers: [
     AppService,
     // { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
