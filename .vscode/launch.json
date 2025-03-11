@@ -11,6 +11,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:debug"], // 对应 package.json 的脚本
       "console": "integratedTerminal",
+      "outputCapture": "std",
       "skipFiles": ["<node_internals>/**"]
     }
   ]
