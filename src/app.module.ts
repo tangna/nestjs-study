@@ -13,6 +13,8 @@ import { CacheableMemory } from 'cacheable';
 import { AppControllerV2 } from './app.controllerV2';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
+import { BullModule } from '@nestjs/bullmq';
+import { AudioModule } from './audio/audio.module';
 
 @Module({
   imports: [
@@ -38,7 +40,7 @@ import { TasksModule } from './tasks/tasks.module';
     //   inject: [ConfigService],
     //   useFactory: async (configService: ConfigService) => {
     //     console.log(configService);
-    //     console.log(configService.get('CACHE_HOST'));
+    //     console.log(configService.get('CACHE_URI'));
     //     return {
     //       stores: [
     //         new Keyv({
@@ -47,7 +49,7 @@ import { TasksModule } from './tasks/tasks.module';
     //             lruSize: configService.get('CACHE_SIZE'),
     //           }),
     //         }),
-    //         createKeyv(configService.get('CACHE_HOST')),
+    //         createKeyv(configService.get('CACHE_URI')),
     //       ],
     //     };
     //   },
@@ -55,6 +57,18 @@ import { TasksModule } from './tasks/tasks.module';
     UsersModule,
     ScheduleModule.forRoot(),
     TasksModule,
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get('QUEUE_HOST'),
+          port: configService.get('QUEUE_PORT'),
+          keyPrefix: configService.get('QUEUE_PREFIX'),
+        },
+      }),
+    }),
+    AudioModule,
   ],
   controllers: [AppController, AppControllerV2],
   providers: [
