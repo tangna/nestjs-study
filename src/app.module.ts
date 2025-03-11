@@ -30,31 +30,31 @@ import { CacheableMemory } from 'cacheable';
       }),
     }),
     // CacheModule.register({ ttl: 5000 }),
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        console.log(configService);
-        console.log(configService.get('CACHE_HOST'));
-        return {
-          stores: [
-            new Keyv({
-              store: new CacheableMemory({
-                ttl: configService.get('CACHE_TTL'),
-                lruSize: configService.get('CACHE_SIZE'),
-              }),
-            }),
-            createKeyv(configService.get('CACHE_HOST')),
-          ],
-        };
-      },
-    }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => {
+    //     console.log(configService);
+    //     console.log(configService.get('CACHE_HOST'));
+    //     return {
+    //       stores: [
+    //         new Keyv({
+    //           store: new CacheableMemory({
+    //             ttl: configService.get('CACHE_TTL'),
+    //             lruSize: configService.get('CACHE_SIZE'),
+    //           }),
+    //         }),
+    //         createKeyv(configService.get('CACHE_HOST')),
+    //       ],
+    //     };
+    //   },
+    // }),
     UsersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
+    // { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
   ],
 })
 export class AppModule {}
