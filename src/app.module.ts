@@ -15,10 +15,12 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { BullModule } from '@nestjs/bullmq';
 import { AudioModule } from './audio/audio.module';
+import { LoggerModule } from './logger/LoggerModule';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    LoggerModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

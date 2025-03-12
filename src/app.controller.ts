@@ -2,6 +2,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Logger,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
@@ -13,6 +14,8 @@ import { RoleEntity } from './entities/role.entity';
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AppController {
+  private readonly logger = new Logger(AppController.name);
+
   constructor(
     private readonly appService: AppService,
     // @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -20,7 +23,8 @@ export class AppController {
 
   @Get('')
   getHello(): string {
-    console.log('v1', new Date());
+    this.logger.log('Doing something with timestamp here ->');
+    this.logger.log('v1', new Date());
     return this.appService.getHello();
   }
 
@@ -41,7 +45,7 @@ export class AppController {
   //   if (!hello) {
   //     hello = this.appService.getHello();
   //     await this.cacheManager.set('key', hello, 5000);
-  //     console.log('set cache', new Date());
+  //     this.logger.log('set cache', new Date());
   //   }
   //   return hello;
   // }
