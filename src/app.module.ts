@@ -18,6 +18,7 @@ import { AudioModule } from './audio/audio.module';
 import { LoggerModule } from './logger/logger.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OrdersModule } from './orders/orders.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { OrdersModule } from './orders/orders.module';
     AudioModule,
     EventEmitterModule.forRoot(),
     OrdersModule,
+    AuthModule,
   ],
   controllers: [AppController, AppControllerV2],
   providers: [

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -12,10 +13,11 @@ export class UsersService {
     private dataSource: DataSource,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();
     user.nickName = createUserDto.nickName;
-    user.password = createUserDto.password;
+    // user.password = createUserDto.password;
+    user.password = await bcrypt.hashSync(createUserDto.password);
 
     return this.usersRepository.save(user);
   }
@@ -28,7 +30,14 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id: id });
   }
 
+  findByNickName(nickName: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({
+      nickName: nickName,
+    });
+  }
+
   findByIds(ids: number[]): Promise<User[]> {
+    // TODO: 实现in查询
     return this.usersRepository.findBy({});
   }
 
