@@ -4,6 +4,7 @@ import { ConsoleLogger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { MyLogger } from './logger/my-logger.service';
 import * as compression from 'compression';
 import * as session from 'express-session';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,6 +14,7 @@ async function bootstrap() {
       logLevels: ['log'],
     }),
   });
+  app.use(helmet());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -28,6 +30,7 @@ async function bootstrap() {
   app.use(
     session({ secret: 'my-secret', resave: false, saveUninitialized: false }),
   );
+  app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

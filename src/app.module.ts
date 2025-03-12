@@ -19,6 +19,7 @@ import { LoggerModule } from './logger/logger.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -77,6 +78,22 @@ import { AuthModule } from './auth/auth.module';
     EventEmitterModule.forRoot(),
     OrdersModule,
     AuthModule,
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
+      // useFactory: (configService: ConfigService) => [
+      //   {
+      //     ttl: configService.get('THROTTLE_TTL'),
+      //     limit: configService.get('THROTTLE_LIMIT'),
+      //   },
+      // ],
+    }),
   ],
   controllers: [AppController, AppControllerV2],
   providers: [
