@@ -3,11 +3,13 @@ import {
   Controller,
   Get,
   Logger,
+  Res,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UserEntity } from './entities/user.entity';
-import { RoleEntity } from './entities/role.entity';
+import { UserEntity } from './users/entities/user.entity';
+import { RoleEntity } from './users/entities/role.entity';
+import { Response } from 'express';
 // import { CACHE_MANAGER, CacheInterceptor } from '@nestjs/cache-manager';
 // import { Cache } from 'cache-manager';
 
@@ -26,6 +28,11 @@ export class AppController {
     this.logger.log('Doing something with timestamp here ->');
     this.logger.log('v1', new Date());
     return this.appService.getHello();
+  }
+
+  @Get('cookie')
+  getCookie(@Res({ passthrough: true }) response: Response) {
+    response.cookie('cookie', Date.now());
   }
 
   @Get('entity')

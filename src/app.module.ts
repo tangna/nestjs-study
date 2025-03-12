@@ -15,7 +15,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { BullModule } from '@nestjs/bullmq';
 import { AudioModule } from './audio/audio.module';
-import { LoggerModule } from './logger/LoggerModule';
+import { LoggerModule } from './logger/logger.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -71,6 +73,8 @@ import { LoggerModule } from './logger/LoggerModule';
       }),
     }),
     AudioModule,
+    EventEmitterModule.forRoot(),
+    OrdersModule,
   ],
   controllers: [AppController, AppControllerV2],
   providers: [
