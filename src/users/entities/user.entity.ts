@@ -3,7 +3,15 @@ import { RoleEntity } from './role.entity';
 
 export class UserEntity {
   id: number;
+  /**
+   * The firstName of the User
+   * @example na
+   */
   firstName: string;
+  /**
+   * The lastName of the User
+   * @default tang
+   */
   lastName: string;
 
   @Exclude()
