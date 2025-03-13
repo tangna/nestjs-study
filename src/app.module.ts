@@ -20,6 +20,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -94,6 +95,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       //   },
       // ],
     }),
+    HealthModule,
   ],
   controllers: [AppController, AppControllerV2],
   providers: [
